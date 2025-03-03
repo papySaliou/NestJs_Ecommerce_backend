@@ -12,12 +12,15 @@ export class Categorie {
 
     // @Column()
     // description: string;
+    @Column({ type: 'text', nullable: true })
+description?: string;
 
     // @Column()
     // image: string;  
 
     // @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     // dateAjout: Date;
+
     @OneToMany(() => Produit, produit => produit.categorie)
     produits: Produit[];
 }

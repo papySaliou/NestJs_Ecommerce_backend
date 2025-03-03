@@ -12,32 +12,32 @@ export class CategorieService {
     private categorieRepository: Repository<Categorie>,
   ) {}
 
-  async findAll(): Promise<Categorie[]> {
-    return await this.categorieRepository.find();
+  findAll(): Promise<Categorie[]> {
+    return this.categorieRepository.find();
   }
 
   async findOne(id: number): Promise<Categorie> {
     const categorie = await this.categorieRepository.findOne({ where: { id } });
     if (!categorie) {
-      throw new NotFoundException(`Catégorie avec l'ID ${id} non trouvée.`);
+      throw new NotFoundException(`Catégorie avec l'id ${id} non trouvée.`);
     }
     return categorie;
   }
 
-  async create(createCategorieDto: CreateCategorieDto): Promise<Categorie> {
+  create(createCategorieDto: CreateCategorieDto): Promise<Categorie> {
     const newCategorie = this.categorieRepository.create(createCategorieDto);
-    return await this.categorieRepository.save(newCategorie);
+    return this.categorieRepository.save(newCategorie);
   }
 
   async update(id: number, updateCategorieDto: UpdateCategorieDto): Promise<Categorie> {
-    const existingCategorie = await this.findOne(id); // Vérifier si la catégorie existe
     await this.categorieRepository.update(id, updateCategorieDto);
-    return { ...existingCategorie, ...updateCategorieDto }; // Retourner la version mise à jour
+    return this.findOne(id); // Récupérer la version mise à jour
   }
 
-  async remove(id: number): Promise<{ message: string }> {
-    const categorie = await this.findOne(id); // Vérifier si la catégorie existe
-    await this.categorieRepository.delete(id);
-    return { message: `Catégorie avec l'ID ${id} supprimée avec succès.` };
+  async remove(id: number): Promise<void> {
+    const result = await this.categorieRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Catégorie avec l'id ${id} non trouvée.`);
+    }
   }
 }

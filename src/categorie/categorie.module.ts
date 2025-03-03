@@ -10,6 +10,6 @@ import { Categorie } from './categorie.entity';
   ], 
   controllers: [CategorieController],
   providers: [CategorieService],
-  exports: [CategorieService],  // Exporter CategorieService pour que d'autres modules y accèdent
+  exports: [CategorieService],
 })
 export class CategorieModule {}
